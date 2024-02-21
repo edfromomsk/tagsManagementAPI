@@ -1,0 +1,190 @@
+openapi: 3.0.0
+info:
+  version: '1.0.0'
+  title: 'Добавление тегов на фото'
+  description: Концепция на https://youtrack.wildberries.ru/articles/CD-A-719/Dobavlenie-tegov-na-foto
+servers:
+  - url: 'https://api.example.com'
+paths:
+  /tag/add:
+    post:
+      summary: Метод добавления тегов на фото
+      description: |
+        Позволяет добавить несколько тегов на фото, каждый тег привязан к НМ.
+        Передавать НМИД или ссылку https://www.wildberries.ru/catalog/72598374/detail.aspx?
+        Возможно нужно добавить признак того, что фото - не является главной, после fileId, isMain = false,
+        возможно нужно добавлять nmId перед объектом. Тег можно добаить только на фото в НМС. Может ли быть случай что фото не в НМС? Ограничений 2 на фото, 10 на НМку скорее всего.
+      operationId: addTags
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddTagsRequest'
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagsResponse'
+        '400':
+          description: Bad request
+  /tag/edit/{tagId}:
+    put:
+      summary: Метод редактирования тега
+      description: |
+        Позволяет изменить положение или размер области тега. Возможно использовать лучше patch.
+        Должна быть возможность частично обновлять объект, чтобы не обнулить значения, если пользователь просто изменил область.
+      operationId: editTag
+      parameters:
+        - in: path
+          name: tagId
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditTagRequest'
+      responses:
+        '200':
+          description: Тег успешно изменен
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Bad request
+  /tag/{tagId}:
+    delete:
+      summary: Метод удаления тега
+      description: Позволяет удалить существующий тег. Подойдет ли userId или нужен другой параметр?
+      operationId: deleteTag
+      parameters:
+        - in: header
+          name: X-User-Id
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - in: path
+          name: tagId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponse'
+        '400':
+          description: Bad request
+  /tagList:
+    get:
+      summary: Метод получения тегов по фото
+      description: Позволяет получить все теги привязанные к фото.
+      operationId: getTags
+      parameters:
+        - in: query
+          name: fileId
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetTagsResponse'
+        '400':
+          description: Bad request
+components:
+  schemas:
+    AddTagsRequest:
+      type: object
+      properties:
+        fileId:
+          type: string
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
+    Tag:
+      type: object
+      required:
+        - nmId
+        - position
+      properties:
+        nmId:
+          type: integer
+        position:
+          $ref: '#/components/schemas/Position'
+        shape:
+          type: string
+          enum: [point, area]
+        area:
+          $ref: '#/components/schemas/Area'
+    Position:
+      type: object
+      properties:
+        x:
+          type: number
+        y:
+          type: number
+    Area:
+      type: object
+      properties:
+        width:
+          type: number
+        height:
+          type: number
+    TagsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+        failedTags:
+          type: array
+          items:
+            $ref: '#/components/schemas/FailedTag'
+    FailedTag:
+      type: object
+      properties:
+        nmTag:
+          type: integer
+        error:
+          type: string
+    EditTagRequest:
+      type: object
+      properties:
+        newPosition:
+          $ref: '#/components/schemas/Position'
+        newArea:
+          $ref: '#/components/schemas/Area'
+    DeleteTagRequest:
+      type: object
+      properties:
+        tagId:
+          type: string
+    SuccessResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+    GetTagsResponse:
+      type: object
+      properties:
+        tags:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
