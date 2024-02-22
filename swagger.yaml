@@ -161,17 +161,17 @@ components:
                     taggedNM:
                       type: integer
                       example: 168737059
-                      description: на какую карточку поставщика ссылаемся
-                    position:
-                      $ref: '#/components/schemas/Position'
-    Position:
+                      description: На какую карточку поставщика ссылаемся
+                    coordinates:
+                      $ref: '#/components/schemas/Coordinates'
+    Coordinates:
       type: array
       items:
         type: number
         example: 10, 36
         minItems: 2
         maxItems: 2
-        description: Массив из 2 чисел, описывающих позицию тега
+        description: Массив из 2 чисел, описывающих координаты тега
     SuccessResponse:
       type: object
       properties:
@@ -181,7 +181,7 @@ components:
       type: object
       properties:
         newPosition:
-          $ref: '#/components/schemas/Position'
+          $ref: '#/components/schemas/Coordinates'
     GetTagsResponse:
       type: array
       items:
@@ -235,4 +235,4 @@ components:
           example: 168737059
           description: Идентификатор NM, на который ссылается тег.
         position:
-          $ref: '#/components/schemas/Position'
+          $ref: '#/components/schemas/Coordinates'
