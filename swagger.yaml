@@ -4,18 +4,12 @@ info:
   title: 'Добавление тегов на фото'
   description: Концепция на [https://youtrack.wildberries.ru](https://youtrack.wildberries.ru/articles/CD-A-719/Dobavlenie-tegov-na-foto)
 servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/RDIGGS080/tagManagement/1.0.0
   - url: 'https://localhost:8080'
 paths:
   /api/v1/tag/add:
     post:
       summary: Метод добавления тегов на фото
-      description: |
-        Позволяет добавить несколько тегов (ссылок на другую карточку поставщика) на фото, каждый тег привязан к НМ.
-        Тег можно добавить только на фото из НМС. Фото не должно быть заглавной.
-        Ограничения по количеству тегов должны быть прописаны на стороне приложения.
+      description: Позволяет добавить несколько тегов на фото, каждый тег привязан к НМ.
       operationId: addTags
       parameters:
         - in: header
@@ -41,8 +35,7 @@ paths:
   /api/v1/tag/edit/{tagId}:
     put:
       summary: Метод редактирования тега
-      description: |
-        Позволяет изменить положение тега на фото
+      description: Позволяет изменить положение тега на фото.
       operationId: editTag
       parameters:
         - in: path
@@ -59,17 +52,17 @@ paths:
               $ref: '#/components/schemas/EditTagRequest'
       responses:
         '200':
-          description: Тег успешно изменен.
+          description: Тег успешно изменен
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
         '400':
           description: Bad request
-  /api/v1//tag/{tagId}:
+  /api/v1/tag/{tagId}:
     delete:
       summary: Метод удаления тега
-      description: Позволяет удалить существующий тег. Для авторизации используется X-User-Id.
+      description: Позволяет удалить существующий тег.
       operationId: deleteTag
       parameters:
         - in: header
@@ -139,7 +132,7 @@ components:
       type: object
       properties:
         nmId:
-          type: number
+          type: integer
           example: 168737060
         photoWithTags:
           type: array
@@ -149,10 +142,9 @@ components:
               photoId:
                 type: string
                 format: uuid
-              isMaine:
+              isMain:
                 type: boolean
                 example: false
-                description: Является ли фото первой
               tags:
                 type: array
                 items:
@@ -161,9 +153,13 @@ components:
                     taggedNM:
                       type: integer
                       example: 168737059
-                      description: На какую карточку поставщика ссылаемся
                     coordinates:
-                      $ref: '#/components/schemas/Coordinates'
+                      type: array
+                      items:
+                        type: number
+                        example: [10, 36]
+                        minItems: 2
+                        maxItems: 2
     Coordinates:
       type: array
       items:
