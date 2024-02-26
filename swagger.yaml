@@ -2,11 +2,11 @@ openapi: 3.0.0
 info:
   version: '1.0.0'
   title: 'Добавление тегов на фото'
-  description: Концепция на [https://youtrack.wildberries.ru](https://youtrack.wildberries.ru/articles/CD-A-719/Dobavlenie-tegov-na-foto)
+  description: Концепция на [https://youtrack.wildberries.ru](https://youtrack.wildberries.ru/articles/CD-A-719/Dobavlenie-tegov-na-fото)
 servers:
   - url: 'https://localhost:8080'
 paths:
-  /api/v1/tag/add:
+  /api/v1/tags:
     post:
       summary: Метод добавления тегов на фото
       description: Позволяет добавить несколько тегов на фото, каждый тег привязан к НМ.
@@ -32,7 +32,26 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
         '400':
           description: Bad request
-  /api/v1/tag/edit/{tagId}:
+    get:
+      summary: Метод получения всех тегов
+      description: Позволяет получить все теги привязанные к NM или все теги поставщика, если nmId не указан.
+      operationId: getTags
+      parameters:
+        - in: query
+          name: nmId
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetAllTagsResponse'
+        '400':
+          description: Bad request
+  /api/v1/tags/{tagId}:
     put:
       summary: Метод редактирования тега
       description: Позволяет изменить положение тега на фото.
@@ -59,7 +78,6 @@ paths:
                 $ref: '#/components/schemas/SuccessResponse'
         '400':
           description: Bad request
-  /api/v1/tag/{tagId}:
     delete:
       summary: Метод удаления тега
       description: Позволяет удалить существующий тег.
@@ -84,46 +102,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SuccessResponse'
-        '400':
-          description: Bad request
-  /api/v1/tagByNM:
-    get:
-      summary: Метод получения тегов по nmId
-      description: Позволяет получить все теги привязанные к NM.
-      operationId: getTags
-      parameters:
-        - in: query
-          name: nmId
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Успешный ответ
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetTagsResponse'
-        '400':
-          description: Bad request
-  /api/v1/tagList:
-    get:
-      summary: Метод получения всех тегов
-      description: Позволяет получить все теги поставщика.
-      operationId: getAllTags
-      parameters:
-        - in: header
-          name: X-Supplier-Id
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: Успешный ответ
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/GetAllTagsResponse'
         '400':
           description: Bad request
 components:
@@ -178,7 +156,7 @@ components:
       properties:
         newPosition:
           $ref: '#/components/schemas/Coordinates'
-    GetTagsResponse:
+    GetAllTagsResponse:
       type: array
       items:
         type: object
@@ -192,33 +170,6 @@ components:
             items:
               $ref: '#/components/schemas/TagDetails'
             description: Массив тегов, привязанных к фотографии.
-    GetAllTagsResponse:
-      type: array
-      items:
-        type: object
-        properties:
-          nmId:
-            type: integer
-            description: Идентификатор NM.
-            example: 168737060
-          photoWithTags:
-            type: array
-            items:
-              $ref: '#/components/schemas/TagWithPhotoId'
-    TagWithPhotoId:
-      type: object
-      required:
-        - photoId
-        - tags
-      properties:
-        photoId:
-          type: string
-          format: uuid
-          description: Идентификатор фото, на котором находятся теги.
-        tags:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagDetails'          
     TagDetails:
       type: object
       properties:
