@@ -4,9 +4,6 @@ info:
   title: 'Добавление тегов на фото'
   description: Концепция на [https://youtrack.wildberries.ru](https://youtrack.wildberries.ru/articles/CD-A-719/Dobavlenie-tegov-na-fото)
 servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/RDIGGS080/tagManagement/1.0.0
   - url: 'https://localhost:8080'
 paths:
   /api/v1/tags:
@@ -37,7 +34,7 @@ paths:
           description: Bad request
     get:
       summary: Метод получения всех тегов
-      description: GET /api/v1/tags/{nmId} позволяет получить все теги привязанные к карточке или все теги поставщика, если nmId не указан в пути.
+      description: 'GET /api/v1/tags/{nmId} позволяет получить все теги привязанные к карточке или все теги поставщика, если nmId не указан в пути. На стороне бека выборка данных может выглядеть следующим образом: "SELECT * FROM [productTags] WHERE nmId = {nmId} ORDER BY nmId" (в первом случае) или "SELECT *.t FROM productTags t RIGHT JOIN nomenclatures ON t.nm_id = n.id WHERE n.supplier_id = {X-Supplier-Id}" (во втором)'
       operationId: getTags
       parameters:
         - in: query
