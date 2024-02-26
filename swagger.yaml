@@ -42,7 +42,7 @@ paths:
     put:
       summary: Метод редактирования тега
       description: |
-        Позволяет изменить положение тега на фото.
+        Позволяет изменить положение тега на фото
       operationId: editTag
       parameters:
         - in: path
