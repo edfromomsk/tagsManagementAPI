@@ -59,7 +59,7 @@ paths:
               $ref: '#/components/schemas/EditTagRequest'
       responses:
         '200':
-          description: Тег успешно изменен
+          description: Тег успешно изменен.
           content:
             application/json:
               schema:
