@@ -17,9 +17,17 @@ paths:
       parameters:
         - in: header
           name: X-Supplier-Id
+          description: ИД поставщика
           required: true
           schema:
             type: integer
+        - in: header
+          name: Idempotency-key
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: 'Уникальное значение, генерируемое клиентом, чтобы сделать запрос идемпотентным.'
       requestBody:
         required: true
         content:
