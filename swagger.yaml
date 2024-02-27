@@ -35,14 +35,32 @@ paths:
             schema:
               $ref: '#/components/schemas/AddTagsRequest'
       responses:
-        '200':
-          description: Успешный ответ
+        '201':
+          description: Тег(и) добавлен(ы)
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetAllTagsResponse'
         '400':
-          description: Bad request
+          description: Bad Request
+        '401':
+          description: Необходима аутентификация
+        '403':
+          description: Доступ запрещен
+        '404':
+          description: Ресурс не найден
+        '409':
+          description: Конфликт (тег уже существует)
+        '422':
+          description: Невозможно обработать сущность (например, ошибка валидации)
+        '501':
+          description: Not Implemented
+        '502':
+          description: Bad Gateway
+        '503':
+          description: Service Unavailable
+        '504':
+          description: Gateway Timeout
     get:
       summary: Метод получения всех тегов
       description: 'GET /api/v1/tags/{nmId} позволяет получить все теги привязанные к карточке или все теги поставщика, если nmId не указан в пути. На стороне бека выборка данных может выглядеть следующим образом: "SELECT * FROM [productTags] WHERE nmId = {nmId} ORDER BY nmId" (в первом случае) или "SELECT *.t FROM productTags t LEFT JOIN nomenclatures ON t.nm_id = n.id WHERE n.supplier_id = {X-Supplier-Id}" (во втором)'
