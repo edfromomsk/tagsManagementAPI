@@ -148,15 +148,27 @@ components:
         photosWithTags:
           $ref: '#/components/schemas/GetAllTagsResponse'
     Coordinates:
-      type: array
-      items:
-        type: number
-        oneOf:
-          - minItems: 2
-            maxItems: 2
-          - minItems: 8
-            maxItems: 8
-        description: Массив из чисел, описывающих координаты тега, 2 числа - точка, 8 - область.
+      type: object
+      properties:
+        corners:
+          type: array
+          items:
+            type: number
+          minItems: 8
+          maxItems: 8
+          example: [175, 275, 275, 275, 275, 325, 175, 325]
+          description: Массив из восьми чисел, описывающих координаты углов тега (верхний левый, верхний правый, нижний правый, нижний левый).
+        center:
+          type: array
+          items:
+            type: number
+          minItems: 2
+          maxItems: 2
+          example: [225, 300]
+          description: Массив из двух чисел, описывающих координаты центра тега.
+      required:
+        - corners
+        - center
     SuccessResponse:
       type: object
       properties:
@@ -202,16 +214,11 @@ components:
         tagId:
           type: string
           format: uuid
+          example: '27eb3594-5b47-4b53-aad3-5cb94fd76508'
           description: Идентификатор тега.
         taggedNM:
           type: integer
           example: 168737059
           description: Идентификатор карточки, на которую ссылается тег.
-        tagType:
-          type: string
-          enum:
-            - point
-            - area
-          example: point
         tagCoordinates:
           $ref: '#/components/schemas/Coordinates'
