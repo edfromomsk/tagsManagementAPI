@@ -4,9 +4,6 @@ info:
   title: 'Добавление тегов на фото'
   description: Концепция на [https://youtrack.wildberries.ru](https://youtrack.wildberries.ru/articles/CD-A-719/Dobavlenie-tegov-na-fото)
 servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/RDIGGS080/tagManagement/1.0.0
   - url: 'https://localhost:8080'
 paths:
   /api/v1/tags:
@@ -154,10 +151,12 @@ components:
       type: array
       items:
         type: number
-        example: 10, 36
-        minItems: 2
-        maxItems: 2
-        description: Массив из 2 чисел, описывающих координаты тега
+        oneOf:
+          - minItems: 2
+            maxItems: 2
+          - minItems: 8
+            maxItems: 8
+        description: Массив из чисел, описывающих координаты тега, 2 числа - точка, 8 - область.
     SuccessResponse:
       type: object
       properties:
@@ -208,5 +207,11 @@ components:
           type: integer
           example: 168737059
           description: Идентификатор карточки, на которую ссылается тег.
+        tagType:
+          type: string
+          enum:
+            - point
+            - area
+          example: point
         tagCoordinates:
           $ref: '#/components/schemas/Coordinates'
