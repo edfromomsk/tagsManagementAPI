@@ -147,27 +147,40 @@ components:
           example: 168737060
         photosWithTags:
           $ref: '#/components/schemas/GetAllTagsResponse'
-    Coordinates:
+    Dimension:
       type: object
       properties:
-        corners:
-          type: array
-          items:
-            type: number
-          minItems: 8
-          maxItems: 8
-          example: [175, 275, 275, 275, 275, 325, 175, 325]
-          description: Массив из восьми чисел, описывающих координаты углов тега (верхний левый, верхний правый, нижний правый, нижний левый).
+        position:
+          type: object
+          properties:
+            x:
+              type: integer
+              example: 175
+            y:
+              type: integer
+              example: 275
+          description: Координаты верхнего левого угла прямоугольника.
+        height:
+          type: integer
+          example: 50
+          description: Высота прямоугольника.
+        width:
+          type: integer
+          example: 100
+          description: Ширина прямоугольника.
         center:
-          type: array
-          items:
-            type: number
-          minItems: 2
-          maxItems: 2
-          example: [225, 300]
-          description: Массив из двух чисел, описывающих координаты центра тега.
+          type: object
+          properties:
+            x:
+              type: integer
+              example: 225
+            y:
+              type: integer
+              example: 300
+          description: Координаты центра прямоугольника.
       required:
-        - corners
+        - position
+        - width
         - center
     SuccessResponse:
       type: object
@@ -178,7 +191,7 @@ components:
       type: object
       properties:
         newPosition:
-          $ref: '#/components/schemas/Coordinates'
+          $ref: '#/components/schemas/Dimension'
     GetAllTagsResponse:
       type: array
       items:
@@ -220,5 +233,5 @@ components:
           type: integer
           example: 168737059
           description: Идентификатор карточки, на которую ссылается тег.
-        tagCoordinates:
-          $ref: '#/components/schemas/Coordinates'
+        dimension:
+          $ref: '#/components/schemas/Dimension'
