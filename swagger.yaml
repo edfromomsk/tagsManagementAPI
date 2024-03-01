@@ -150,16 +150,6 @@ components:
     Dimension:
       type: object
       properties:
-        position:
-          type: object
-          properties:
-            x:
-              type: integer
-              example: 175
-            y:
-              type: integer
-              example: 275
-          description: Координаты верхнего левого угла прямоугольника.
         height:
           type: integer
           example: 50
@@ -201,10 +191,6 @@ components:
             type: string
             format: uuid
             description: Идентификатор фото, на которой находятся теги.
-          isMain:
-            type: boolean
-            example: false
-            description: фото не должно быть первым
           tags:
             type: array
             items:
