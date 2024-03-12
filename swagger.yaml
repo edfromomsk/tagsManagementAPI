@@ -150,28 +150,67 @@ components:
     Dimension:
       type: object
       properties:
-        height:
-          type: integer
-          example: 50
-          description: Высота прямоугольника.
-        width:
-          type: integer
-          example: 100
-          description: Ширина прямоугольника.
-        center:
+        resolution:
           type: object
           properties:
-            x:
+            width:
               type: integer
-              example: 225
-            y:
+              example: 900
+            height:
               type: integer
-              example: 300
-          description: Координаты центра прямоугольника.
+              example: 1200
+          required:
+            - width
+            - height
+        rectangle:
+          type: object
+          properties:
+            topLeftCorner:
+              type: object
+              properties:
+                x:
+                  type: integer
+                  example: 175
+                y:
+                  type: integer
+                  example: 275
+              required:
+                - x
+                - y
+            width:
+              type: number
+              format: float
+              example: 165
+            height:
+              type: number
+              format: float
+              example: 310
+            center:
+              type: object
+              properties:
+                x:
+                  type: number
+                  format: float
+                  example: 0.53
+                  minimum: 0
+                  maximum: 1
+                y:
+                  type: number
+                  format: float
+                  example: 0.51
+                  minimum: 0
+                  maximum: 1
+              required:
+                - x
+                - y
+          required:
+            - topLeftCorner
+            - width
+            - height
+            - center
       required:
-        - position
-        - width
-        - center
+        - resolution
+        - rectangle
     SuccessResponse:
       type: object
       properties:
