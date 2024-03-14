@@ -184,7 +184,7 @@ components:
             height:
               type: number
               format: float
-              example: 310
+              example: 311
             center:
               type: object
               properties:
