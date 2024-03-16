@@ -1,0 +1,30 @@
+@startuml
+
+skinparam sequence {
+    ArrowColor blue
+    
+    LifeLineBorderColor blue 
+    LifeLineBackgroundColor #A9DCDF
+
+    ParticipantBorderColor blue 
+    ParticipantBackgroundColor #A9DCDF 
+    ParticipantFontColor black
+
+    ActorBorderColor blue 
+    ActorBackgroundColor #A9DCDF
+}
+
+actor Поставщик as user
+participant Фоторедактор as editor
+database tags as db
+queue Queue as queue
+participant Статика as basket
+participant Потребители as consumers
+
+user -> editor: ui
+editor -> db: rest api
+db ->> queue
+basket ->> queue
+consumers -> basket
+
+@enduml
