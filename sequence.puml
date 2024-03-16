@@ -15,4 +15,5 @@ editor -> db: rest api
 db ->> queue
 basket ->> queue
 consumers -> basket
+
 @enduml
