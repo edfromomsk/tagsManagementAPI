@@ -1,20 +1,7 @@
 @startuml
-
+!theme bluegray
 autonumber
 
-skinparam sequence {
-    ArrowColor blue
-    
-    LifeLineBorderColor blue 
-    LifeLineBackgroundColor #A9DCDF
-
-    ParticipantBorderColor blue 
-    ParticipantBackgroundColor #A9DCDF 
-    ParticipantFontColor black
-
-    ActorBorderColor blue 
-    ActorBackgroundColor #A9DCDF
-}
 
 actor Поставщик as user
 participant Фоторедактор as editor
@@ -28,5 +15,4 @@ editor -> db: rest api
 db ->> queue
 basket ->> queue
 consumers -> basket
-
 @enduml
