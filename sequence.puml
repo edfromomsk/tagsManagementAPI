@@ -1,12 +1,12 @@
 @startuml
 skinparam DefaultFontColor #7fafe1
 skinparam BackgroundColor #24272b
+skinparam roundcorner 20
+
 skinparam sequence {
     ArrowColor #7fafe1
     LifeLineBorderColor #7fafe1 
     LifeLineBackgroundColor #7fafe1
-    
-
     ParticipantBorderColor #7fafe1 
     ParticipantBackgroundColor #7fafe1 
     ParticipantFontColor white
@@ -24,10 +24,10 @@ participant "Статика" as Static
 participant "Потребители" as CMS
 
 == Привязка тегов == 
-FE -> NMS: Получает список фоток
+NMS -> FE: Получает список фоток
 activate FE
 activate NMS
-FE -> DB: Получает список тегов
+DB -> FE: Получает список тегов
 
 activate DB
 FE -> DB: Записывает инфу по тегам
