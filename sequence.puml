@@ -1,19 +1,67 @@
 @startuml
-!theme bluegray
+skinparam DefaultFontColor #7fafe1
+skinparam BackgroundColor #24272b
+skinparam sequence {
+    ArrowColor #7fafe1
+    LifeLineBorderColor #7fafe1 
+    LifeLineBackgroundColor #7fafe1
+    
+
+    ParticipantBorderColor #7fafe1 
+    ParticipantBackgroundColor #7fafe1 
+    ParticipantFontColor white
+
+    ActorBorderColor #7fafe1 
+    ActorBackgroundColor #7fafe1
+}
+
 autonumber
+participant "Фоторедактор" as FE
+participant "НМС" as NMS
+participant "БД" as DB
+participant "tagWatcher" as TW
+participant "Статика" as Static
+participant "Потребители" as CMS
 
+== Привязка тегов == 
+FE -> NMS: Получает список фоток
+activate FE
+activate NMS
+FE -> DB: Получает список тегов
 
-actor Поставщик as user
-participant Фоторедактор as editor
-database tags as db
-queue Queue as queue
-participant Статика as basket
-participant Потребители as consumers
+activate DB
+FE -> DB: Записывает инфу по тегам
+deactivate FE
+== Синхронизация информации ==
+TW -> DB: Получает инфу об изменениях
+deactivate DB
+activate TW
 
-user -> editor: ui
-editor -> db: rest api
-db ->> queue
-basket ->> queue
-consumers -> basket
+TW -> NMS: Передает информацию по тегам
 
+NMS -> TW: Коллбек с текущей привязкой тегов к фоткам
+deactivate NMS
+TW -> DB: Сверяет инфу и обновляет при необходимости
+deactivate TW
+activate DB
+
+DB -> Static: Отправляет инфу по тегам и counter фотки
+deactivate DB
+activate Static
+CMS -> Static: Получают теги
+deactivate Static
+
+== Альтернативный флоу ==
+NMS -> TW: Сообщает об изменениях в карточке с тегами
+activate TW
+TW -> DB: Сверяет инфу и обновляет при необходимости
+activate DB
+deactivate TW
+DB -> Static: Отправляет обновленную инфу
+deactivate DB
+activate Static
+CMS -> Static: Получают обновленные теги
+deactivate Static
+
+deactivate FE
 @enduml
