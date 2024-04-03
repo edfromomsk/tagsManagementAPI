@@ -226,10 +226,10 @@ components:
       items:
         type: object
         properties:
-          photoId:
-            type: string
-            format: uuid
-            description: Идентификатор фото, на которой находятся теги.
+          picCount:
+            type: number
+            example: 3
+            description: Порядковый номер фото, на котором находятся теги.
           tags:
             type: array
             items:
